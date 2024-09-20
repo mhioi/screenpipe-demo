@@ -150,13 +150,13 @@ async function submitUserMessage(content: string) {
                   endTime
                 } = query
                 const url = new URL('http://127.0.0.1:3030/search')
-                url.searchParams.append('q', q) // Use the correct query variable
+                url.searchParams.append('q', query) // Use the correct query variable
                 url.searchParams.append('content_type', queries.contentType)
                 if (queries.limit) url.searchParams.append('limit', +queries.limit)
                 if (queries.offset) url.searchParams.append('offset', +queries.offset)
                 if (startTime) url.searchParams.append('start_time', queries.startTime)
                 if (endTime) url.searchParams.append('end_time', queries.endTime)
-
+                console.log("the request is : " , url)
                 const response = await fetch(url.href)
                 if (!response.ok) {
                   throw new Error(`API request failed: ${response.status} ${response.statusText}`)
@@ -165,6 +165,7 @@ async function submitUserMessage(content: string) {
                 // Parse the JSON response and store it in a variable
                 const responseData = await response.json();
                 const contents = responseData.data.map(item => item.content);
+                console.log("the assistant uses these contents : " , contents)
                 const formattedContents = contents.map(content => JSON.stringify(content, null, 2));
                 return contents; // Return the prettied data
               })
